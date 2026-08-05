@@ -1,5 +1,4 @@
-Port Scanner & Service Identifier
-A lightweight Python tool that scans a target host for open TCP ports and identifies the services running on them — built as the foundation for a network/tech audit workflow.
+Port Scanner & Service Identifier, a lightweight Python tool that scans a target host for open TCP ports and identifies the services running on them, built as the foundation for a network/tech audit workflow.
 ```
 Target: 192.168.1.10 (192.168.1.10)
 Ports:  1024 port(s) requested
@@ -19,16 +18,8 @@ PORT    SERVICE             BANNER
 993     IMAPS               TLSv1.3 | CN=mail.local | * OK IMAPS4rev1 ready
 995     POP3S               TLSv1.3 | CN=mail.local | +OK POP3 ready
 ```
-Why I built this
-Port scanning is one of the first steps in any network security audit or asset inventory — knowing what's actually listening on a host tells you a lot more than a hostname or IP address alone. I wanted a tool that goes beyond a bare open/closed port list and actually tries to identify what is running, including grabbing real banners from encrypted services via a TLS handshake.
-Features
-Two scan engines
-`socket` (default) — TCP connect scan, multithreaded, no special privileges required
-`scapy` (`--syn`) — raw SYN scan, faster/stealthier, requires `scapy` and root/admin privileges
-Service identification via a common-ports lookup table (SSH, HTTP, RDP, MySQL, Redis, Elasticsearch, and more) plus live banner grabbing
-TLS-aware banner grabbing — for implicit-TLS ports (443, 465, 993, 995, 8443, 3269) the scanner performs a real TLS handshake and reports the negotiated TLS version, certificate common name, and any post-handshake greeting
-Flexible port specification — single ports, ranges, or comma-separated lists (`22,80,443,8000-8100`)
-JSON export for feeding results into other tools or archiving audit history
+Why I built this. Port scanning is one of the first steps in any network security audit or asset inventory, knowing what's actually listening on a host tells you a lot more than a hostname or IP address alone. I wanted a tool that goes beyond a bare open/closed port list and actually tries to identify what is running, including grabbing real banners from encrypted services via a TLS handshake.
+Features: Two scan engines. The default socket engine performs a TCP connect scan, is multithreaded, and doesn't need special privileges. The scapy engine, used with --syn, does a raw SYN scan; it's faster and stealthier but requires scapy and root or admin rights. Service identification uses a common-ports lookup table that covers SSH, HTTP, RDP, MySQL, Redis, Elasticsearch, and more, and it also grabs live banners. TLS-aware banner grabbing works for implicit-TLS ports like 443, 465, 993, 995, 8443, and 3269. In those cases the scanner does a real TLS handshake and reports the negotiated TLS version, the certificate common name, and any post-handshake greeting. Flexible port specification allows single ports, ranges, or comma-separated lists such as 22,80,443,8000-8100. Finally, the tool can export results in JSON for feeding into other tools or archiving audit history.
 Requirements
 Python 3.8+
 `scapy` — only required for `--syn` mode
@@ -60,20 +51,12 @@ Flag	Description	Default
 `--syn`	Use a raw SYN scan via scapy instead of a TCP connect scan	off
 `-o`, `--output`	Write results to a JSON file	none
 How it works
-Resolves the target hostname to an IP address.
-Parses the requested port specification into a sorted list.
-For each port, either:
-opens a TCP connection and reads/sends a small probe to grab a banner (`socket` mode), or
-sends a raw SYN packet and inspects the response flags (`scapy` mode, SYN scan).
-For ports that speak TLS immediately on connect (like 465/993/995), performs a TLS handshake instead of a plaintext read, and reports the TLS version and certificate CN alongside any greeting.
-Matches the banner text and/or port number against a lookup table to label the likely service.
-Prints a summary table and, optionally, writes a JSON report.
-⚠️ Responsible use
+The tool resolves the target hostname to an IP address. It parses the requested port specification into a sorted list. For each port, it either opens a TCP connection and reads/sends a small probe to grab a banner (socket mode), or sends a raw SYN packet and inspects the response flags (scapy mode, SYN scan). For ports that speak TLS immediately on connect (like 465/993/995), it performs a TLS handshake instead of a plaintext read and reports the TLS version and certificate CN alongside any greeting. The banner text and/or port number is matched against a lookup table to label the likely service. A summary table is printed, and, if requested, a JSON report is written.
+
+Responsible use
 This tool is intended for authorized network audits, asset discovery, and learning purposes only. Only scan hosts and networks you own or have explicit written permission to test. Unauthorized port scanning can violate computer-use laws (e.g., the U.S. Computer Fraud and Abuse Act) even when the tool itself is benign.
+
 Roadmap / ideas
-UDP scanning
-OS fingerprinting (TTL, window size)
-CSV export for compliance reporting
-Concurrent TLS handshakes to speed up encrypted-port scanning
+UDP scanning, OS fingerprinting (TTL, window size), CSV export for compliance reporting, concurrent TLS handshakes to speed up encrypted-port scanning.eed up encrypted-port scanning
 License
 MIT — see LICENSE.
