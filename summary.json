@@ -1,0 +1,16 @@
+{
+  "total_return_pct": -7.22206140110601,
+  "cagr_pct": -26.376671223887566,
+  "sharpe": -7.740565170328337,
+  "sortino": -9.563423695775663,
+  "max_drawdown_pct": -7.569303625944117,
+  "win_rate_pct": 44.14784394250513,
+  "profit_factor": 0.8845387007388005,
+  "n_bars": 14123.0,
+  "n_trades": 572.0,
+  "avg_position_abs": 0.14710425491888313,
+  "buy_and_hold_pct": -3.163748467093608,
+  "final_dollar_pnl_1_MNQ": -4383.448774689148,
+  "n_retrains": 15,
+  "periods_per_year": 57690.818181818184
+}
